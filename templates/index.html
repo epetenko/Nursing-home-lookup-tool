@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+    <head>
+		  <meta charset="UTF-8">
+		  <title>Nursing home basics</title>
+		  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no" />
+		<!--   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+		  <link rel="stylesheet" type="text/css" href="css/jquery.auto-complete.css">
+		  <script src="js/jquery.auto-complete.min.js"></script> -->
+		  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <link rel="stylesheet" href="static/css/detail_template.css" />
+        <link rel="stylesheet" href="static/css/index_styles.css" />
+
+         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.18/css/jquery.dataTables.min.css"/>
+		  <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+		  <script src="https://cdn.datatables.net/1.10.18/js/jquery.dataTables.min.js"></script>
+
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.css" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.js"></script>
+        <script src="https://pym.nprapps.org/pym.v1.js"></script>
+
+		<!--   <link href="css/BentonSans-Regular_sOT.otf" rel="stylesheet"> -->
+<!-- 		  <script type="text/javascript" src="js/pym_2.js"></script>
+
+
+ -->
+    </head>
+    <body>
+
+    	<section class='njam-container' id='lookup-tool'>
+	        <h1 class='section-title'>Explore our lookup tool</h1>
+	        <h2>View the map:</h2>
+	        <div id='all-map'></div>
+	        <h2>Or browse through all providers:</h2>
+	        <table id='example' >
+	            <thead>
+	                <th>Provider Name</th>
+	                <th>Provider City</th>
+	                <th>Number of beds</th>
+	                <th>Overall Rating</th>
+	            </thead>
+	    <!--         {% for obj in object_list %}
+	            <tr>
+	                <td><a href="{{ obj['Federal Provider Number']}}/">{{ obj['Provider Name'] }}</a></td>
+	                <td>{{ obj['Provider City'] }}</td>
+	                <td>{{ obj['Number of Certified Beds'] }}</td>
+	                <td>{{ obj['Overall Rating'] }}</td>
+	            </tr>
+	            {% endfor %} -->
+	        </table>
+    	</section>
+       <script>
+       	var pymChild = new pym.Child();
+
+       	 // create the lookup table
+			function setupData() {
+			    $(document).ready(function () {
+			        $('#example').DataTable({
+			            "ajax": {
+			            	'url': 'static/Provider_info_w_cost_report_data.json',
+			            	'dataSrc': ""
+			            },
+			            // "columnDefs": [ 
+			            // 		{ 'targets': [0],
+			            // 			"visible": false
+			            // 		},
+			            // 		{
+			            // 			"targets": [4],
+			            // 			"visible": false
+			            // 		}
+			            // ],
+			            "columns": [
+			                { "render": function(data, type, row) {
+			                		return '<a href="/Nursing_home_lookup_tool/Embed-tool/' + row[4] + '/index.html">' + data + '</a>'
+			                	}
+			            	},
+			                null,
+			                null,
+			                {"render": function(data, type, row) {
+			                	console.log(data)
+			                		if (data == 1) {
+			                			return "<div class='much-below-average table-rating'>Much below average</div>"
+			                		} else if (data == 2) {
+			                			return "<div class='below-average table-rating'>Below average</div>"
+			                		} else if (data == 3) {
+			                			return "<div class='average table-rating'>Average</div>"
+			                		} else if (data == 4) {
+			                			return "<div class='above-average table-rating'>Above average</div>"
+			                		} else if (data == 5) {
+			                			return "<div class='much-above-average table-rating'>Much above average</div>"
+			                		} else {
+			                			return "N/A"
+			                		}
+			                	}
+			            		}
+			            	]
+			        	}
+			        	
+			        );
+			    });
+			}
+			$( window ).on( "load", setupData );
+
+
+			var map = L.map('all-map').setView([40.270548, -74.5], 9);
+            var osmLayer = new L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
+				attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+				subdomains: 'abcd',
+				maxZoom: 19
+            });
+            map.addLayer(osmLayer);
+            var data = {
+              "type": "FeatureCollection",
+              "features": [
+                {% for obj in object_list %}
+                {
+                  "type": "Feature",
+                  "properties": {
+                    "full_name": "{{ obj['Provider Name'] }}",
+                    "id": "{{ obj['Federal Provider Number'] }}",
+                    "rating" :"{{obj['Overall Rating']}}"
+                  },
+                  "geometry": {
+                    "type": "Point",
+                    "coordinates": [{{ obj.long|float }}, {{ obj.lat|float }}]
+                  }
+                }{% if not loop.last %},{% endif %}
+                {% endfor %}
+              ]
+            };
+
+            function getclassname(data) {
+					if (data == 1) {
+            			return "much-below-average all-marker"
+            		} else if (data == 2) {
+            			return "below-average all-marker"
+            		} else if (data == 3) {
+            			return "average all-marker"
+            		} else if (data == 4) {
+            			return "above-average all-marker"
+            		} else if (data == 5) {
+            			return "much-above-average all-marker"
+            		} else {
+            			return "na all-marker"
+            		}            	
+            }
+       
+            var dataLayer = L.geoJson(data, {
+                pointToLayer: function (feature, latlng) {
+                    return L.circleMarker(latlng, {radius: 4, className: getclassname(feature.properties.rating)});
+                },
+                onEachFeature: function(feature, layer) {
+
+                    layer.bindPopup(
+                        '<a href="' + feature.properties.id + '/index.html">' +
+                            feature.properties.full_name +
+                        '</a>'
+                    );
+                }
+            });
+            map.addLayer(dataLayer);
+            pymChild.sendHeight();
+
+
+</script>
+    </body>
+</html>

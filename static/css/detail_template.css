@@ -1,0 +1,390 @@
+.njam-container {
+  /*    font-family: 'Roboto',sans-serif;
+  */
+  fill: #333;
+  max-width: 620px;
+  margin-top: 5px;
+  margin-left: 2px;
+  /*    padding:0px 0px 15px 2px;
+  */
+}
+
+@font-face {
+  font-family: BentonSans;
+  src: url("BentonSans/BentonSans-Regular_sOT.otf") format("opentype");
+}
+.njam-container div.btn-group.bootstrap-select {
+  width: 90%;
+}
+
+h1, .banner, .district, .chamber, .geo-table, .muni_elex, .town1, .dropdown-container, .chosen-drop, .town_name, .options, #county1 {
+  font-family: "Roboto", sans-serif;
+}
+
+p, .contact-info, .address, .rating, .overall-rating, details, .description, h2 {
+  font-family: BentonSans;
+}
+
+.description {
+  font-size: 15px;
+}
+
+.banner, .banner2 {
+  background-color: #6487AC;
+  width: 100%;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+.banner {
+  height: 20px;
+  width: 100%;
+  padding: 0px 0px 0px 5px;
+}
+
+.banner2 {
+  margin: 8px 0px 0px 0px;
+  height: 5px;
+  bottom: 10px;
+  width: 100%;
+}
+
+h1 {
+  margin: 2px;
+}
+
+.intro_text {
+  font-size: 14px;
+  clear: both;
+}
+
+.geo-form, .legislators {
+  /*    background-color: #C67549;
+  */
+}
+
+.geo-form {
+  padding: 5px 0px 5px 8px;
+  margin: 2px;
+  font-size: 16px;
+  /*    width:90%;
+  */
+  max-width: 300px;
+  clear: both;
+}
+
+.geo-form .towny {
+  color: #000000;
+}
+
+#town {
+  width: 400px;
+}
+
+#input_click {
+  background-color: #566EB5;
+  border-color: #566EB5;
+  font-size: 14px;
+  margin: 2px;
+}
+
+.district {
+  font-size: 20px;
+}
+
+.address {
+  font-size: 13px;
+  margin-bottom: 5px;
+}
+
+#map {
+  width: 200px;
+  height: 150px;
+  margin-bottom: 10px;
+}
+
+.marker {
+  stroke-opacity: 0.7;
+  fill-opacity: 0.8;
+}
+
+.na {
+  background-color: #ddd;
+  fill: #4e4747;
+  stroke: #4e4747;
+}
+
+.much-below-average {
+  background-color: #B05A61;
+  fill: #B05A61;
+  stroke: #B05A61;
+}
+
+.below-average {
+  background-color: #9E6C93;
+  fill: #9E6C93;
+  stroke: #9E6C93;
+}
+
+.average {
+  background-color: #6487AC;
+  fill: #6487AC;
+  stroke: #6487AC;
+}
+
+.above-average {
+  background-color: #229B9A;
+  fill: #229B9A;
+  stroke: #229B9A;
+}
+
+.much-above-average {
+  background-color: #53A56B;
+  fill: #53A56B;
+  stroke: #53A56B;
+}
+
+.overall-rating {
+  color: #fff;
+  margin-bottom: 5px;
+  margin-top: 5px;
+  font-size: 14px;
+  text-transform: uppercase;
+  font-weight: bold;
+  width: 200px;
+  text-align: center;
+  vertical-align: center;
+}
+
+details {
+  clear: both;
+  font-size: 13px;
+}
+
+.legislators a {
+  color: #000;
+  text-decoration: underline;
+}
+
+.name {
+  font-size: 15px;
+  padding-top: 2px;
+}
+
+.staffing-rank {
+  font-size: 20px;
+}
+
+.deficiencies-tot {
+  font-size: 20px;
+}
+
+.penalties-tot {
+  font-size: 20px;
+}
+
+.district {
+  font-size: 20px;
+  margin-bottom: 5px;
+  margin-top: 5px;
+  font-weight: bold;
+}
+
+.legislators {
+  margin: 0px 5px 5px 0px;
+  padding: 5px 7px 0px 0px;
+  color: #000;
+  max-width: 275px;
+}
+
+.chamber {
+  margin-top: 10px;
+  padding-top: 10px;
+  font-weight: bold;
+  clear: both;
+  text-transform: uppercase;
+}
+
+.geo-leg-header {
+  font-size: 14px;
+  text-transform: uppercase;
+}
+
+.geo-table {
+  font-size: 14px;
+  padding: 5px 5px 5px 5px;
+  margin-top: 5px;
+  display: grid;
+  grid-template-columns: 50px 75px 150px;
+  grid-template-rows: 25px 30px 30px 30px 30px 30px 30px;
+  grid-gap: 10px 5px;
+  align-items: center;
+}
+
+.table-header {
+  padding: 2px;
+  font-weight: bold !important;
+  font-size: 14px;
+  color: #333;
+  text-transform: uppercase;
+}
+
+#header-label {
+  grid-column-start: 1;
+  grid-column-end: 3;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+#aide-label, #lpn-label, #rn-label {
+  grid-column-start: 1;
+  grid-column-end: 1;
+}
+
+#aide-nj-label, #aide-our-label, #lpn-nj-label, #lpn-our-label, #rn-nj-label, #rn-our-label {
+  grid-column-start: 2;
+  grid-column-end: 3;
+}
+
+#staffing-rank, #aide-nj-value, #aide-our-value, #lpn-nj-value, #lpn-our-value, #rn-nj-value, #rn-our-value {
+  grid-column-start: 3;
+  grid-column-end: 4;
+  background-color: #C5C5C5;
+  vertical-align: center;
+}
+
+.staffing-rank {
+  background-color: #C5C5C5;
+  vertical-align: center;
+}
+
+#rn-label {
+  grid-row-start: 2;
+  grid-row-end: 3;
+}
+
+#rn-our-label {
+  grid-row-start: 2;
+  grid-row-end: 3;
+}
+
+#rn-nj-label {
+  grid-row-start: 3;
+  grid-row-end: 4;
+}
+
+#rn-our-value {
+  grid-row-start: 2;
+  grid-row-end: 3;
+}
+
+#rn-nj-value {
+  grid-row-start: 3;
+  grid-row-end: 4;
+}
+
+#lpn-label {
+  grid-row-start: 4;
+  grid-row-end: 5;
+}
+
+#lpn-our-label {
+  grid-row-start: 4;
+  grid-row-end: 5;
+}
+
+#lpn-nj-label {
+  grid-row-start: 5;
+  grid-row-end: 6;
+}
+
+#lpn-our-value {
+  grid-row-start: 4;
+  grid-row-end: 5;
+}
+
+#lpn-nj-value {
+  grid-row-start: 5;
+  grid-row-end: 6;
+}
+
+#aide-label {
+  grid-row-start: 6;
+  grid-row-end: 7;
+}
+
+#aide-our-label {
+  grid-row-start: 6;
+  grid-row-end: 7;
+}
+
+#aide-nj-label {
+  grid-row-start: 7;
+  grid-row-end: 8;
+}
+
+#aide-our-value {
+  grid-row-start: 6;
+  grid-row-end: 7;
+}
+
+#aide-nj-value {
+  grid-row-start: 7;
+  grid-row-end: 8;
+}
+
+#staffing-rank {
+  grid-row-start: 7;
+  grid-row-end: 8;
+  float: left;
+}
+
+.size-value {
+  background-color: #6487AC;
+  color: #fff;
+  vertical-align: center;
+  font-size: 12px;
+  font-weight: bold;
+  padding-left: 2px;
+}
+
+.rank-tot {
+  color: #000;
+  vertical-align: center;
+  font-size: 12px;
+  font-weight: bold;
+  margin-left: 2px;
+}
+
+.town_name {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.credit {
+  font-size: 12px;
+  margin: 0;
+  padding: 0;
+  color: #333;
+  margin-bottom: 5px;
+}
+
+@media only screen and (min-width: 400px) {
+  #njam-container {
+    margin: 0px 0px 17px 5px;
+  }
+}
+@media only screen and (max-width: 400px) {
+  #njam-container {
+    margin: 5px 2px 5px 2px;
+  }
+
+  body {
+    margin: 0px;
+  }
+}
+/*#close-geo {
+    display:none;
+}*/
+
+/*# sourceMappingURL=static/css/detail_template.css.map */

@@ -1,0 +1,388 @@
+<!doctype html>
+<html lang=en>
+    <head>
+    	<meta charset=UTF-8>
+		  <title>{{object['Provider Name']}}</title>
+		  <meta description="Location and quality information for {{object['Provider Name']}} in {{object['Provider City']}},">
+		  <meta name=viewport content=width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no />
+		<!--   <script src=https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js></script>
+		  <link rel=stylesheet type=text/css href=css/jquery.auto-complete.css>
+		  <script src=js/jquery.auto-complete.min.js></script> -->
+<!-- 		  <link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4VaPmSTsz/K68vbdEjh4u crossorigin=anonymous>
+ -->        <link rel=stylesheet href='https://nj-apps.s3.amazonaws.com/Nursing_home_lookup_tool/css/detail_template.css' />
+        		  <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.2/chosen.jquery.min.js" type="text/javascript">
+    </script> 
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.2/chosen.min.css" rel="stylesheet">
+
+        <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
+
+<script type="text/javascript" src="https://pym.nprapps.org/pym.v1.min.js"></script>
+
+<!--         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+ -->
+
+
+		<!--   <link href=css/BentonSans-Regular_sOT.otf rel=stylesheet> -->
+<!-- 		  <script type=text/javascript src=js/pym_2.js></script>
+ -->
+
+    </head>
+    <body>
+    	<div class='njam-container'>
+<!--     		<div class='banner'>Nursing homes</div>
+ -->    		<div class='district'>
+				<div class='title'>{{object['Provider Name']}}</div>
+			</div>
+		<div class='address'>
+			<div class='address-line1'> {{ object['Provider Address']}}  </div><div class=' address city'>  {{object['Provider City'] }} </div>
+		<div id='map'></div>
+		<div id='beds'>{{ object['Number of Certified Beds']}} certified beds</div>
+		<div id='type'>Accepts: {{ object['Provider Type']}}</div>
+
+		</div>
+		<div class='chamber'>OVERALL RATING</div>
+			<div class="overall-rating {% if object['Overall Rating'] | int == 1 %}
+	    				much-below-average
+					{% elif object['Overall Rating'] | int == 2 %}
+	   					 below-average
+					{% elif object['Overall Rating'] | int == 3 %}
+	   					 average
+					{% elif object['Overall Rating'] | int == 4 %}
+	   					above-average
+					{% elif object['Overall Rating'] | int == 5 %}
+	   					much-above-average
+					{% else %}
+	  					  N/A
+					{% endif %}"> {% if object['Overall Rating'] | int == 1 %}
+	    				Much below average
+					{% elif object['Overall Rating'] | int == 2 %}
+	   					 Below average
+					{% elif object['Overall Rating'] | int == 3 %}
+	   					 Average
+					{% elif object['Overall Rating'] | int == 4 %}
+	   					 Above average
+					{% elif object['Overall Rating'] | int == 5 %}
+	   					Much above average
+					{% else %}
+	  					  N/A
+					{% endif %}</div>
+		<div class='legislators'>
+			
+
+<!-- 			<div class='overall-rating'>  {{object['Overall Rating'] }} </div><span>out of 5</span>
+ -->			<p class='description'> The overall rating given out by the federal government for this nursing home.</p>
+		</div>
+
+		<div class='chamber'>STAFFING</div>
+		<div class="overall-rating {% if object['Staffing Rating'] | int == 1 %}
+	    				much-below-average
+					{% elif object['Staffing Rating'] | int == 2 %}
+	   					 below-average
+					{% elif object['Staffing Rating'] | int == 3 %}
+	   					 average
+					{% elif object['Staffing Rating'] | int == 4 %}
+	   					above-average
+					{% elif object['Staffing Rating'] | int == 5 %}
+	   					much-above-average
+					{% else %}
+	  					  N/A
+					{% endif %}"> {% if object['Staffing Rating'] | int == 1 %}
+	    				Much below average
+					{% elif object['Staffing Rating'] | int == 2 %}
+	   					 Below average
+					{% elif object['Staffing Rating'] | int == 3 %}
+	   					 Average
+					{% elif object['Staffing Rating'] | int == 4 %}
+	   					 Above average
+					{% elif object['Staffing Rating'] | int == 5 %}
+	   					Much above average
+					{% else %}
+	  					  N/A
+					{% endif %}</div>
+		<div class='legislators'>
+						<div class='name description'>Staffing rank: 
+							<div id='staffing-rank' style='width:80%'>
+				 				<div id='staffing-size' class='size-value' style='height:100%;width:{{object.CMS_tot_rank|float / 360 *100}}%;'>{{object.CMS_tot_rank|int}}</div>
+				 			</div>
+				 			<div class='rank-tot'>360</div>
+
+				 		</div>
+						<!-- 	<span class='staffing-rank'>
+							{% if object.CMS_tot_rank | int == 0 %}
+							N/A
+							{%else %}
+
+						  {{ object.CMS_tot_rank|int }}
+						  {% endif %}
+						    </span> of 360 providers</div> -->
+							
+			<div class='name staffing'><p class='description'>One way to judge staffing quality is to see how much time skilled staff is spending with patients. This is the number of hours nurses are spending with each patient in a single day:</p>
+				<div class='geo-table'>
+					<div id='header-label'>Nurse</div>
+					<div id='rn-label'>RNs:</div>
+					<div id='rn-our-label'>This home</div>
+
+					<div id='rn-our-value'> 
+						<div id='rn-our-size' class='size-value' style='height:100%;width:{{object.rn_hr_per_day|float / 3 *100}}%;'>
+							{% if object.CMS_tot_rank | int == 0 %}
+								N/A
+							{%else %}
+								{{'%0.2f'| format(object.rn_hr_per_day|float) }}
+							{% endif %}
+						</div>
+					</div>
+					<div id='rn-nj-label'>NJ avg</div>
+
+					<div id='rn-nj-value'>
+						<div id='rn-nj-size' class='size-value' style='height:100%;width:{{0.73|float / 3 *100}}%;'>0.73</div>
+					</div>
+				  	<div id='lpn-label'> LPNs:</div>
+					<div id='lpn-our-label'>This home</div>
+
+				  	<div id='lpn-our-value'>
+				  		<div id='lpn-our-size' class='size-value' style='height:100%;width:{{object.lpn_hr_day|float / 3 *100}}%;'>
+				  			{% if object.CMS_tot_rank | int == 0 %}
+								N/A
+							{%else %}
+								{{'%0.2f'| format(object.lpn_hr_day|float) }}
+							{% endif %}
+
+				  		</div>
+				  	</div>
+					<div id='lpn-nj-label'>NJ avg</div>
+
+				  	<div id='lpn-nj-value'>	
+				  			<div id='lpn-nj-size' class='size-value' style='height:100%;width:{{0.90|float / 3 *100}}%;'>0.90</div>
+
+				  	</div>
+				 	<div id='aide-label'>Aides:</div>
+					<div id='aide-our-label'>This home</div>
+
+				 	<div id='aide-our-value'>
+				 		<div id='aide-our-size' class='size-value' style='height:100%;width:{{object.asst_hr_per_day|float / 3 *100}}%;'>
+
+				 		{% if object.CMS_tot_rank | int == 0 %}
+								N/A
+							{%else %}
+								{{'%0.2f'| format(object.asst_hr_per_day|float)}}
+							{% endif %}
+						</div>
+
+				 	</div>
+					<div id='aide-nj-label'>NJ avg</div>
+
+				 	<div id='aide-nj-value'>
+				 		<div id='aide-nj-size' class='size-value' style='height:100%;width:{{2.3|float / 3 *100}}%;'>2.3</div>
+				 </div>
+					</div>
+				</div>
+			</div>
+		<div class='legislators'>
+		<div class='chamber'>Quality Measures</div>
+				<div class="overall-rating {% if object['QM Rating'] | int == 1 %}
+		    				much-below-average
+						{% elif object['QM Rating'] | int == 2 %}
+		   					 below-average
+						{% elif object['QM Rating'] | int == 3 %}
+		   					 average
+						{% elif object['QM Rating'] | int == 4 %}
+		   					above-average
+						{% elif object['QM Rating'] | int == 5 %}
+		   					much-above-average
+						{% else %}
+		  					  N/A
+						{% endif %}">{% if object['QM Rating'] | int == 1 %}
+		    				Much below average
+						{% elif object['QM Rating'] | int == 2 %}
+		   					 Below average
+						{% elif object['QM Rating'] | int == 3 %}
+		   					 Average
+						{% elif object['QM Rating'] | int == 4 %}
+		   					 Above average
+						{% elif object['QM Rating'] | int == 5 %}
+		   					Much above average
+						{% else %}
+		  					  N/A
+						{% endif %}</div>
+				<div class='name staffing'><p class='description'>Another way to look at a nursing home is what happened to residents while they were in there.</p>
+						<div class='dropdown_container'>
+						 <span id="county1">
+						  <select class="chosen-select town1" data-placeholder="Pick a category..." style="width:90%;height: 30px" tabindex="2">
+						      <option class='options' value='' disabled selected>Select a category:</option>
+						        <option class='options' id='falls' value='falls' data-title='Residents who had a bad fall:' data-nj='3%' data-this='{{object.Percent_with_fall|int}}%'>Falls
+						        </option>
+						        <option class='options' id='restrained' data-title='Residents who were restrained:' value='restrained'  data-nj='0%' data-this='{{object.Percent_restrained|int}}%'>Restraint
+						        </option>
+						        <option class='options' id='psych_meds' value='psych_meds' data-title='Residents given psych meds' data-nj='33%' data-this='{{object.Percent_with_psych_meds|int}}%'>Psych medications
+						        </option>
+						        <option value='Collapse'>Collapse this list</option>
+						      </select>
+						    </span> 
+						</div>
+
+  <div class="grid"></div>									
+		</div>
+		
+		<div class='chamber'>INSPECTIONS</div>
+			<div class="overall-rating {% if object['Health Inspection Rating'] | int == 1 %}
+		    				much-below-average
+						{% elif object['Health Inspection Rating'] | int == 2 %}
+		   					 below-average
+						{% elif object['Health Inspection Rating'] | int == 3 %}
+		   					 average
+						{% elif object['Health Inspection Rating'] | int == 4 %}
+		   					above-average
+						{% elif object['Health Inspection Rating'] | int == 5 %}
+		   					much-above-average
+						{% else %}
+		  					  N/A
+						{% endif %}"> {% if object['Health Inspection Rating'] | int == 1 %}
+		    				Much below average
+						{% elif object['Health Inspection Rating'] | int == 2 %}
+		   					 Below average
+						{% elif object['Health Inspection Rating'] | int == 3 %}
+		   					 Average
+						{% elif object['Health Inspection Rating'] | int == 4 %}
+		   					 Above average
+						{% elif object['Health Inspection Rating'] | int == 5 %}
+		   					Much above average
+						{% else %}
+		  					  N/A
+						{% endif %}</div>
+		<div class='legislators'>
+			<p class='description'>New Jersey routinely inspects nursing homes once a year and investigates complaints about potential health and safety violations.</p><p class='description'>While minor violations are common, a large number of violations combined with fines could suggest a lower-quality nursing home.</p>
+			<div class='name description'>Total violations, 2015-2019: <span class='deficiencies-tot'>{{object['Rating Cycle 1 Total Number of Health Deficiencies']|int  + object['Rating Cycle 2 Total Number of Health Deficiencies']|int + object['Rating Cycle 3 Total Number of Health Deficiencies']|int}}</span></div>
+			<div class='name description penalties'>Number of fines: <span class='penalties-tot'> {{ object['Number of Fines'] }} </span></div>
+			<div class='name description penalties'>Total paid: <span class='deficiencies-tot'>${{ object['Total Amount of Fines in Dollars']}}</span>
+			</div>
+		</div>
+
+
+<!-- 		<div class='banner2'></div>
+ -->
+<script type='text/javascript'>
+
+var pymChild = new pym.Child();
+
+	 function getclassname(data) {
+					if (data == 1) {
+            			return "much-below-average marker"
+            		} else if (data == 2) {
+            			return "below-average marker"
+            		} else if (data == 3) {
+            			return "average marker"
+            		} else if (data == 4) {
+            			return "above-average marker"
+            		} else if (data == 5) {
+            			return "much-above-average marker"
+            		} else {
+            			return "na"
+            		}            	
+            }
+	        var map = L.map('map').setView([{{ object.lat|float }}, {{ object.long|float }}], 8);
+            var osmLayer = new L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+				attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+				subdomains: 'abcd',
+				maxZoom: 19
+            });
+            map.addLayer(osmLayer);
+
+            var blackIcon = L.Icon.extend({
+                options: {
+                    iconUrl: "{{ url_for('static', filename='marker-24.png') }}",
+                    iconSize: [24, 24]
+                }
+            });
+			L.circleMarker([{{ object.lat|float }}, {{ object.long|float }}], {radius: 6, className: getclassname({{object['Overall Rating']}})}).addTo(map);
+
+          // Dropdown Function Pt. 1
+// setting variables for the dropdown
+    var usedNames = [];
+    var config = {
+        '.chosen-select': {},
+        '.chosen-select-deselect': {
+            allow_single_deselect: true
+        },
+        '.chosen-select-no-single': {
+            disable_search_threshold: 10
+        },
+        '.chosen-select-no-results': {
+            no_results_text: 'Oops, nothing found!'
+        },
+        '.chosen-select-width': {
+            width: "95%"
+        }
+    }
+    for (var selector in config) {
+        $(selector).chosen(config[selector]);
+    }
+    var dropdown_county1 = $('select.chosen-select.county1'),
+        dropdown_town1 = $('select.chosen-select.town1'),
+        grid = $('.grid')
+
+    dropdown_town1.on('change', function(e, params) {
+            grid.html("")
+            var emptyoption = $('<option value=""></option>');
+            dropdown_town1.append(emptyoption).trigger('chosen:updated')
+            //Fetches the town picked from the left-side town dropdown
+            town1value = e.target.value;
+            
+            //Initiates populate_cards function
+            populate_cards(town1value, grid, dropdown_town1)
+        })  
+
+     function populate_cards(btn_value, thegrid, thedropdown) {
+     	console.log(btn_value)
+
+     	var category_data = $('#' + btn_value).data();
+
+            // The option to reveal all cards -- will reveal unless the category is specifically set to N/A
+        
+                //A loop that goes through the entry array created earlier 
+                    //Goes through every row and sees if the btn_value matches either the county or the town. If it matches the town, it also checks to see if the county dropdown option matches the county. This is for towns with the same names in different counties.
+                        // CHANGE THIS NO. 4: See above
+                        //Initializes the variable where all of the html will be appended
+                        var gridsquares = '<div class="element-item">'
+                        gridsquares += "<h2 class='town_name'>" + category_data.title + "</h2><div id='infobox'><table class='muni_elex'><tr><td>This nursing home:<td class='notes'>" + category_data.this + "</td></tr><tr><td>State average:</td><td class='name clinton'>" + category_data.nj + "</td><td></table>"
+                        gridsquares += '</div>'
+                        thegrid.append(gridsquares)
+                        //Send the height to Pym after all images are loaded (important for Pym!)
+
+                         pymChild.sendHeight();
+     
+                    // Update all dropdown menus after changes
+        };
+
+
+</script>
+
+    </body>
+</html>
+
+
+
+<!-- 
+Original table layout for staffing levels:
+			<table class='geo-table'>
+					<tr>
+						<td class='table-header'>Nurse</td>
+						<td class='table-header'>This home</td>
+						<td class='table-header'>NJ avg</td>
+					</tr>
+					<tr>
+						<td>RNs:</td>
+						<td> {{'%0.2f'| format(object.rn_hr_per_day|float)}}</td>
+						<td>0.73</td>
+					</tr>
+					<tr>
+					  	<td> LPNs:</td>
+					  	<td> {{'%0.2f'| format(object.lpn_hr_day|float)}}</td>
+					  	<td>0.90</td></tr>
+					 <tr>
+					 	<td>Aides:</td>
+					 	<td>{{'%0.2f'| format(object.asst_hr_per_day|float)}}</td>
+					 	<td>2.3</td>
+					 </tr>
+					</table> -->
