@@ -8,7 +8,7 @@ The data workflow, result and front-end Flask application to create the nursing 
 
 The two main data sources are:
 - The CMS [cost report data](https://www.cms.gov/Research-Statistics-Data-and-Systems/Downloadable-Public-Use-Files/Cost-Reports/SkilledNursingFaciilty-2010-form.html) for Skilled Nursing Facilites, currently only complete for 2017. This is used for _only_ the staffing rank and staffing hours for each type of nurse in the tool. I used this because I believe it's more accurate than the self-reported staffing hours for the nursing homes in the Nursing Home Compare data.
-- The CMS Nursing Home Compare data, updated on a rolling basis: https://data.medicare.gov/data/nursing-home-compare. This is used for the overall rating, the staffing rating, the Quality measures and the inspection information.
+- The CMS [Nursing Home Compare data](https://data.medicare.gov/data/nursing-home-compare), updated on a rolling basis. This is used for the overall rating, the staffing rating, the Quality measures and the inspection information.
 
 Those two are parsed and merged using the NPI / Federal Provider Number in the Jupyter notebook and spits out a CSV and JSON for the front-end tool.
 
