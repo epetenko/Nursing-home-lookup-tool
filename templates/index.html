@@ -4,10 +4,11 @@
 		  <meta charset="UTF-8">
 		  <title>Nursing home basics</title>
 		  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no" />
-		<!--   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-		  <link rel="stylesheet" type="text/css" href="css/jquery.auto-complete.css">
-		  <script src="js/jquery.auto-complete.min.js"></script> -->
 		  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+		  <!-- WARNING: Might have to change these references to something like this to get it to work on a local server: -->
+<!-- 		     <link rel="stylesheet" href="{{ url_for('static', filename='static/css/detail_template.css') }}" />
+		     <link rel="stylesheet" href="{{ url_for('static', filename='static/css/index_styles.css') }}" /> -->
+
         <link rel="stylesheet" href="static/css/detail_template.css" />
         <link rel="stylesheet" href="static/css/index_styles.css" />
 
@@ -20,11 +21,6 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.js"></script>
         <script src="https://pym.nprapps.org/pym.v1.js"></script>
 
-		<!--   <link href="css/BentonSans-Regular_sOT.otf" rel="stylesheet"> -->
-<!-- 		  <script type="text/javascript" src="js/pym_2.js"></script>
-
-
- -->
     </head>
     <body>
 
@@ -33,6 +29,7 @@
 	        <h2>View the map:</h2>
 	        <div id='all-map'></div>
 	        <h2>Or browse through all providers:</h2>
+	        <!-- Creates the table that's fed by DataTables: -->
 	        <table id='example' >
 	            <thead>
 	                <th>Provider Name</th>
@@ -40,14 +37,6 @@
 	                <th>Number of beds</th>
 	                <th>Overall Rating</th>
 	            </thead>
-	    <!--         {% for obj in object_list %}
-	            <tr>
-	                <td><a href="{{ obj['Federal Provider Number']}}/">{{ obj['Provider Name'] }}</a></td>
-	                <td>{{ obj['Provider City'] }}</td>
-	                <td>{{ obj['Number of Certified Beds'] }}</td>
-	                <td>{{ obj['Overall Rating'] }}</td>
-	            </tr>
-	            {% endfor %} -->
 	        </table>
     	</section>
        <script>
@@ -58,27 +47,20 @@
 			    $(document).ready(function () {
 			        $('#example').DataTable({
 			            "ajax": {
+			            	// Fed separate version of file
 			            	'url': 'static/Provider_info_w_cost_report_data.json',
 			            	'dataSrc': ""
 			            },
-			            // "columnDefs": [ 
-			            // 		{ 'targets': [0],
-			            // 			"visible": false
-			            // 		},
-			            // 		{
-			            // 			"targets": [4],
-			            // 			"visible": false
-			            // 		}
-			            // ],
 			            "columns": [
 			                { "render": function(data, type, row) {
+			                	// Creates hyperlink in NH name
 			                		return '<a href="/Nursing_home_lookup_tool/Embed-tool/' + row[4] + '/index.html">' + data + '</a>'
 			                	}
 			            	},
 			                null,
 			                null,
 			                {"render": function(data, type, row) {
-			                	console.log(data)
+			                	// Creates the test that colors the column based on rating
 			                		if (data == 1) {
 			                			return "<div class='much-below-average table-rating'>Much below average</div>"
 			                		} else if (data == 2) {
@@ -102,7 +84,7 @@
 			}
 			$( window ).on( "load", setupData );
 
-
+			// creates leaflet map
 			var map = L.map('all-map').setView([40.270548, -74.5], 9);
             var osmLayer = new L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
 				attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
@@ -113,6 +95,7 @@
             var data = {
               "type": "FeatureCollection",
               "features": [
+              // Uses Jinja/Flask template to loop through csv and create data
                 {% for obj in object_list %}
                 {
                   "type": "Feature",
